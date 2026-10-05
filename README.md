@@ -1,59 +1,51 @@
-# Чисельний метод бісекції (Metóda bisekcie)
+# Numerical Bisection Method
 
-Реалізація чисельного **методу бісекції (поділу відрізка навпіл)** мовою Java для знаходження дійсних коренів неперервної функції.
+[Українська версія](README.uk.md)
 
-## English overview
+A Java implementation of the numerical **bisection method**, also known as the interval halving method, for finding real roots of continuous functions.
 
-This project is a Java implementation of the numerical **bisection method** (also known as the interval halving method) for finding real roots of a continuous function.
+## Problem description
 
-The program reads pairs of values from the `data.txt` file, detects a sign change between neighboring points, and iteratively narrows the search interval until the root is found with the desired accuracy. It is useful for solving equations where a root exists on a known interval and can be adapted to other functions by changing the function formula and input data.
-
----
-
-## 📌 Опис задачі
-
-За замовчуванням програма розв'язує рівняння:
+By default, the program solves the equation:
 
 $$f(x) = x - \cos(x) = 0$$
 
-1. **Відокремлення коренів (Separácia koreňov):** програма зчитує пари значень $(x, f(x))$ із файлу `data.txt` та знаходить початковий інтервал, де функція змінює знак.
-2. **Ітераційний процес бісекції:** інтервал послідовно ділиться навпіл доти, доки його довжина не задовольнить задану точність `epsilon`.
+The program:
 
----
+1. Reads pairs of values $(x, f(x))$ from `data.txt`.
+2. Finds an initial interval in which the function changes sign.
+3. Repeatedly divides the interval in half.
+4. Stops when the interval length satisfies the requested `epsilon` accuracy.
 
-## 💡 Універсальність алгоритму
+## Algorithm flexibility
 
-Ця програма є **повністю універсальною** і може знайти корінь для будь-якої неперервної функції, для якої ви знаєте відрізок, на якому відбувається зміна знака.
+The program can be adapted to any continuous function for which an interval containing a sign change is known.
 
-Щоб використати алгоритм для іншого рівняння, достатньо змінити два елементи.
+### 1. Change the function formula
 
-### 1. Змінити формулу функції в коді
-
-У методі `f(double x)` класу `Main` пропишіть потрібний вираз:
+Update the `f(double x)` method in the `Main` class:
 
 ```java
-// Приклад 1: для многочлена x^3 - x - 2 = 0
+// Example 1: polynomial x^3 - x - 2 = 0
 static double f(double x) {
     return Math.pow(x, 3) - x - 2;
 }
 
-// Приклад 2: для рівняння exp(-x) - x = 0
+// Example 2: equation exp(-x) - x = 0
 static double f(double x) {
     return Math.exp(-x) - x;
 }
 ```
 
-### 2. Оновити вхідні дані у файлі `data.txt`
+### 2. Update `data.txt`
 
-Замініть вміст файлу `data.txt` на нову таблицю точок табулювання відповідної функції. Алгоритм автоматично визначить інтервал, де функція змінює знак.
+Replace the contents of `data.txt` with a new table of points for the selected function. The program will automatically search for neighboring points where the function changes sign.
 
-> **Важливо:** функція повинна бути неперервною на досліджуваному відрізку. Наприклад, для функції $f(x) = \frac{1}{x}$ не можна застосовувати бісекцію на відрізку, що містить точку $x = 0$.
+> **Important:** The function must be continuous on the selected interval. For example, the bisection method must not be applied to an interval containing `x = 0` for the function $f(x) = \frac{1}{x}$.
 
----
+## Input data format
 
-## 🚀 Формат вхідних даних
-
-Файл `data.txt` повинен містити пари чисел, розділені пробілом або табуляцією:
+The `data.txt` file must contain pairs of numbers separated by a space or tab:
 
 ```text
 0.5 -0.377583
@@ -64,35 +56,31 @@ static double f(double x) {
 1.0 0.459698
 ```
 
----
+## Running the project
 
-## 🛠 Запуск проєкту
-
-### Вимоги
+### Requirements
 
 - Java Development Kit (JDK 17+)
-- IntelliJ IDEA або будь-яка інша IDE
+- IntelliJ IDEA or another Java-compatible IDE
 
-### Запуск через термінал
+### Run from the terminal
 
 ```bash
-# Компіляція
+# Compile
 javac -d out src/Main.java
 
-# Запуск
+# Run
 java -cp out Main
 ```
 
----
-
-## 📋 Приклад виконання
+## Example output
 
 ```text
-Знайдено початковий інтервал: [0.70, 0.80]
-Введи іпсілон (наприклад, 0.001): 0.001
-Крок 1: a = 0.700000, b = 0.800000, mid = 0.750000, f(mid) = 0.018311
-Крок 2: a = 0.700000, b = 0.750000, mid = 0.725000, f(mid) = -0.023497
-Крок 3: a = 0.725000, b = 0.750000, mid = 0.737500, f(mid) = -0.002677
+Initial interval found: [0.70, 0.80]
+Enter epsilon (for example, 0.001): 0.001
+Step 1: a = 0.700000, b = 0.800000, mid = 0.750000, f(mid) = 0.018311
+Step 2: a = 0.700000, b = 0.750000, mid = 0.725000, f(mid) = -0.023497
+Step 3: a = 0.725000, b = 0.750000, mid = 0.737500, f(mid) = -0.002677
 ...
-Обчислення завершено! Наближений корінь: 0.739063
+Calculation finished! Approximate root: 0.739063
 ```
